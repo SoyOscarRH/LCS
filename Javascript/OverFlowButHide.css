@@ -2,3 +2,7 @@
     display: none;
 }
 
+#CardInfo::-webkit-scrollbar { 
+    display: none;
+}
+

@@ -275,7 +275,7 @@ export default class Simulation extends React.Component {
                     </h4>
                     <br />
 
-                    <div className="row">
+                    <div className="row" id="CardInfo" style={{'overflowX': 'scroll'}}>
                         <div className="col s10 offset-s1 blue-grey-text darken-2-text">
                             {StepText}
                         </div>
@@ -323,7 +323,7 @@ export default class Simulation extends React.Component {
                 {/*=====================================================*/}
                 {/*=========        TABLE FOR A CARD        ============*/}
                 {/*=====================================================*/}
-                <div id="CardTable" style={{'overflowX': 'scroll'}} className="card-panel z-depth-2">
+                <div className="card-panel z-depth-2">
                     <h4 className="center-align blue-grey-text text-darken-2">
                         <strong>Tabla</strong> de Programación Dinámica
                     </h4>
@@ -398,6 +398,7 @@ class GridTable extends React.Component {
         })
 
         return (
+            <div id="CardTable" style={{'overflowX': 'scroll'}}>
             <table className="browser-default">
                 <tbody>
                     <tr style={{border: 'none'}}>
@@ -407,6 +408,7 @@ class GridTable extends React.Component {
                     {TableCells}
                 </tbody>
             </table>
+            </div>
         )
     }
 
