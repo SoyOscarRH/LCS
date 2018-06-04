@@ -33,6 +33,7 @@ export default class Simulation extends React.Component {
         this.state = {
             VerticalIndex: 0,
             HorizontalIndex: 0,
+            Count: 0,
             String1: this.props.String1,
             String2: this.props.String2,
             Table: DPTable
@@ -146,11 +147,13 @@ export default class Simulation extends React.Component {
         this.setState((PrevState) => {
 
             if (PrevState.VerticalIndex === 0 || PrevState.HorizontalIndex === 0) {
-                return {VerticalIndex: 1, HorizontalIndex: 1}
+                return {VerticalIndex: 1, HorizontalIndex: 1, Count: 1}
             }
             else {
+                let Count = PrevState.Count
                 let VerticalIndex = PrevState.VerticalIndex
                 let HorizontalIndex = PrevState.HorizontalIndex + 1
+
                 if (HorizontalIndex > this.props.String1.length) {
                     HorizontalIndex = 1
                     VerticalIndex = PrevState.VerticalIndex + 1
@@ -162,10 +165,11 @@ export default class Simulation extends React.Component {
                     if (VerticalIndex > this.props.String2.length + 1) {
                         VerticalIndex -= 1
                         HorizontalIndex = this.props.String1.length + 1
+                        Count -= 1
                     }
                 }
 
-                return {VerticalIndex: VerticalIndex, HorizontalIndex: HorizontalIndex}
+                return {VerticalIndex: VerticalIndex, HorizontalIndex: HorizontalIndex, Count: Count + 1}
             }
         })
     }
@@ -183,13 +187,13 @@ export default class Simulation extends React.Component {
         this.setState((PrevState) => {
             
             if (PrevState.VerticalIndex === 0 && PrevState.HorizontalIndex === 0) {
-                return {VerticalIndex: 0, HorizontalIndex: 0}
+                return {VerticalIndex: 0, HorizontalIndex: 0, Count: 0}
             }
             else if (PrevState.VerticalIndex === this.props.String2.length + 1 && PrevState.HorizontalIndex === this.props.String1.length + 1) {
-                return {VerticalIndex: PrevState.VerticalIndex - 1, HorizontalIndex: PrevState.HorizontalIndex - 1}
+                return {VerticalIndex: PrevState.VerticalIndex - 1, HorizontalIndex: PrevState.HorizontalIndex - 1, Count: PrevState.Count - 1}
             }
             else if (PrevState.VerticalIndex === 1 && PrevState.HorizontalIndex === 1) {
-                return {VerticalIndex: 0, HorizontalIndex: 0}
+                return {VerticalIndex: 0, HorizontalIndex: 0, Count: PrevState.Count - 1}
             }
             else {
                 let VerticalIndex = PrevState.VerticalIndex
@@ -199,7 +203,7 @@ export default class Simulation extends React.Component {
                     VerticalIndex = PrevState.VerticalIndex - 1
                 }
 
-                return {VerticalIndex: VerticalIndex, HorizontalIndex: HorizontalIndex}
+                return {VerticalIndex: VerticalIndex, HorizontalIndex: HorizontalIndex, Count: PrevState.Count - 1}
             }
         })
     }
@@ -214,7 +218,7 @@ export default class Simulation extends React.Component {
         })
 
         M.toast({html: 'Regresando al principio del algoritmo', displayLength: 2000})
-        this.setState({VerticalIndex: 0, HorizontalIndex: 0})
+        this.setState({VerticalIndex: 0, HorizontalIndex: 0, Count: 0})
     }
 
 
@@ -236,26 +240,33 @@ export default class Simulation extends React.Component {
         }
 
 
-        let StepText = ""
-
+        let StepText = `${this.state.Count}: `
         if (this.state.VerticalIndex === 0 || this.state.HorizontalIndex === 0) 
-            StepText = `LLenamos la primera fila y columna con puros 0`
+            StepText += `LLenamos la primera fila y columna con puros 0`
         else if (this.state.HorizontalIndex === this.props.String1.length + 1 && this.state.VerticalIndex === this.props.String2.length + 1) {
-            StepText = `La respuesta esta en la posición ${this.state.HorizontalIndex - 1}, ${this.state.VerticalIndex - 1}`
-            M.toast({html: 'Algoritmo Terminado', displayLength: 3000})
+            StepText += `La respuesta esta en la posición ${this.state.HorizontalIndex - 1}, ${this.state.VerticalIndex - 1}`
         }
         else if (this.props.String1[this.state.HorizontalIndex - 1] === this.props.String2[this.state.VerticalIndex-1]) 
-            StepText = `"${this.props.String1}" en la posición ${this.state.HorizontalIndex} es igual a "${this.props.String2}"
+            StepText += `"${this.props.String1}" en la posición ${this.state.HorizontalIndex} es igual a "${this.props.String2}"
                         en la posición ${this.state.VerticalIndex} por lo tanto el LCS es ahora
                         1 + LCS("${this.props.String1.slice(0, this.state.HorizontalIndex - 1)}", "${this.props.String2.slice(0, this.state.VerticalIndex - 1)}")`
         else 
-            StepText = `"${this.props.String1}" en la posición ${this.state.HorizontalIndex} NO es igual a "${this.props.String2}"
+            StepText += `"${this.props.String1}" en la posición ${this.state.HorizontalIndex} NO es igual a "${this.props.String2}"
                         en la posición ${this.state.VerticalIndex} por lo tanto el LCS es ahora
                         max(LCS("${this.props.String1.slice(0, this.state.HorizontalIndex - 1)}", "${this.props.String2.slice(0, this.state.VerticalIndex)}"),
                         LCS("${this.props.String1.slice(0, this.state.HorizontalIndex)}", "${this.props.String2.slice(0, this.state.VerticalIndex - 1)}"))`
 
 
-        if (this.state.VerticalIndex !== 0 && this.state.HorizontalIndex !== 0) M.toast({html: StepText})
+        
+        M.Toast.dismissAll()
+        if (this.state.VerticalIndex !== 0 && this.state.HorizontalIndex !== 0) 
+            M.toast({
+                html: StepText, 
+                inDuration: 0, 
+                outDuration: 0, 
+                displayLength: 8000,
+                activationPercent: 0, 
+            })
 
         return (
             <HotKeys 
