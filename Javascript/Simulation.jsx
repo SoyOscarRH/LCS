@@ -239,23 +239,23 @@ export default class Simulation extends React.Component {
         let StepText = ""
 
         if (this.state.VerticalIndex === 0 || this.state.HorizontalIndex === 0) 
-            StepText = `LLenamos la primera fila y columna con puros 0. Despúes de todo la subsecuencia común más larga de dos cadenas
-                        donde una de ellas es "" es 0`
+            StepText = `LLenamos la primera fila y columna con puros 0`
         else if (this.state.HorizontalIndex === this.props.String1.length + 1 && this.state.VerticalIndex === this.props.String2.length + 1) {
-            StepText = `Ya acabamos, nuestra respuesta esta en la tabla, en la posición ${this.state.HorizontalIndex - 1}, ${this.state.VerticalIndex - 1}`
+            StepText = `La respuesta esta en la posición ${this.state.HorizontalIndex - 1}, ${this.state.VerticalIndex - 1}`
             M.toast({html: 'Algoritmo Terminado', displayLength: 3000})
         }
         else if (this.props.String1[this.state.HorizontalIndex - 1] === this.props.String2[this.state.VerticalIndex-1]) 
-            StepText = `Encontramos que "${this.props.String1}" en la posición ${this.state.HorizontalIndex} SI es igual a "${this.props.String2}"
-                        en la posición ${this.state.VerticalIndex} por lo tanto la subsecuencia más larga actualmente es ahora
-                        mayor por 1 a la que subsecuencia común más grande entre los strings "${this.props.String1.slice(0, this.state.HorizontalIndex - 1)}"
-                        y "${this.props.String2.slice(0, this.state.VerticalIndex - 1)}"`
+            StepText = `"${this.props.String1}" en la posición ${this.state.HorizontalIndex} es igual a "${this.props.String2}"
+                        en la posición ${this.state.VerticalIndex} por lo tanto el LCS es ahora
+                        1 + LCS("${this.props.String1.slice(0, this.state.HorizontalIndex - 1)}", "${this.props.String2.slice(0, this.state.VerticalIndex - 1)}")`
         else 
-            StepText = `Encontramos que "${this.props.String1}" en la posición ${this.state.HorizontalIndex} NO es igual a "${this.props.String2}"
-                        en la posición ${this.state.VerticalIndex} por lo tanto la subsecuencia más larga hasta el momento
-                        es la mayor de la que podemos formar ya sea entre los strings "${this.props.String1.slice(0, this.state.HorizontalIndex - 1)}"
-                        y "${this.props.String2.slice(0, this.state.VerticalIndex)}" o los strings 
-                        "${this.props.String1.slice(0, this.state.HorizontalIndex)}" y "${this.props.String2.slice(0, this.state.VerticalIndex - 1)}"`
+            StepText = `"${this.props.String1}" en la posición ${this.state.HorizontalIndex} NO es igual a "${this.props.String2}"
+                        en la posición ${this.state.VerticalIndex} por lo tanto el LCS es ahora
+                        max(LCS("${this.props.String1.slice(0, this.state.HorizontalIndex - 1)}", "${this.props.String2.slice(0, this.state.VerticalIndex)}"),
+                        LCS("${this.props.String1.slice(0, this.state.HorizontalIndex)}", "${this.props.String2.slice(0, this.state.VerticalIndex - 1)}"))`
+
+
+        if (this.state.VerticalIndex !== 0 && this.state.HorizontalIndex !== 0) M.toast({html: StepText})
 
         return (
             <HotKeys 
@@ -277,6 +277,10 @@ export default class Simulation extends React.Component {
 
                     <div className="row" id="CardInfo" style={{'overflowX': 'scroll'}}>
                         <div className="col s10 offset-s1 blue-grey-text darken-2-text">
+
+                            <strong>Nota:</strong>
+                                Abreviamos a LCS(a, b) a la subsecuencia común más larga entre 'a' y 'b'
+                                <br />
                             {StepText}
                         </div>
                     </div>
