@@ -9,7 +9,7 @@ Simulation for Longest Common Subsequence for a school proyect
 ## Get the Source Code
 
 * [Component Container](Javascript/App.jsx)
-* [AlphabetSoup](Javascript/Simulation.jsx)
+* [Simulation Component](Javascript/Simulation.jsx)
 
 
 ## Screenshots
